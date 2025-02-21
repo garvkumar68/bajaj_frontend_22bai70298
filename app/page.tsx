@@ -2,27 +2,38 @@
 
 import { useState } from "react";
 
+interface FilteredResponse {
+  is_success: boolean;
+  user_id: string;
+  email: string;
+  roll_number: string;
+  numbers?: string[];
+  alphabets?: string[];
+  highest_alphabet?: string[];
+}
+
 export default function Home() {
   const [jsonInput, setJsonInput] = useState<string>('{ "data": [] }');
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
-  const [response, setResponse] = useState<Record<string, any> | null>(null);
+  const [response, setResponse] = useState<FilteredResponse | null>(null);
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     try {
       const parsedData = JSON.parse(jsonInput);
+
       if (!parsedData.data || !Array.isArray(parsedData.data)) {
         alert('Invalid JSON format. Ensure it follows: { "data": ["A", "C", "z"] }');
         return;
       }
 
-      const data = parsedData.data;
+      const data: string[] = parsedData.data;
 
       // Filtering Logic
-      const numbers = data.filter((item: string) => !isNaN(Number(item)));
-      const alphabets = data.filter((item: string) => /^[a-zA-Z]$/.test(item));
+      const numbers = data.filter((item) => !isNaN(Number(item)));
+      const alphabets = data.filter((item) => /^[a-zA-Z]$/.test(item));
       const highestAlphabet = alphabets.length > 0 ? [alphabets.sort().reverse()[0]] : [];
 
-      const filteredResponse: Record<string, any> = {
+      const filteredResponse: FilteredResponse = {
         is_success: true,
         user_id: "Garv_Kumar_12012005",
         email: "22bai70298@cuchd.in",
@@ -100,7 +111,7 @@ export default function Home() {
         Submit
       </button>
 
-      {/* Response Display (Text Format, Not JSON) */}
+      {/* Response Display */}
       {response && (
         <div
           style={{

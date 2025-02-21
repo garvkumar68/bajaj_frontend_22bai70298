@@ -5,24 +5,24 @@ import { useState } from "react";
 export default function Home() {
   const [jsonInput, setJsonInput] = useState<string>('{ "data": [] }');
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
-  const [response, setResponse] = useState<any>(null);
+  const [response, setResponse] = useState<Record<string, any> | null>(null);
 
   const handleSubmit = async () => {
     try {
       const parsedData = JSON.parse(jsonInput);
       if (!parsedData.data || !Array.isArray(parsedData.data)) {
-        alert("Invalid JSON format. Ensure it follows: { \"data\": [\"A\", \"C\", \"z\"] }");
+        alert('Invalid JSON format. Ensure it follows: { "data": ["A", "C", "z"] }');
         return;
       }
 
       const data = parsedData.data;
 
       // Filtering Logic
-      let numbers = data.filter((item: string) => !isNaN(Number(item)));
-      let alphabets = data.filter((item: string) => /^[a-zA-Z]$/.test(item));
-      let highestAlphabet = alphabets.length > 0 ? [alphabets.sort().reverse()[0]] : [];
+      const numbers = data.filter((item: string) => !isNaN(Number(item)));
+      const alphabets = data.filter((item: string) => /^[a-zA-Z]$/.test(item));
+      const highestAlphabet = alphabets.length > 0 ? [alphabets.sort().reverse()[0]] : [];
 
-      let filteredResponse: any = {
+      const filteredResponse: Record<string, any> = {
         is_success: true,
         user_id: "Garv_Kumar_12012005",
         email: "22bai70298@cuchd.in",
@@ -40,7 +40,7 @@ export default function Home() {
       }
 
       setResponse(filteredResponse);
-    } catch (error) {
+    } catch {
       alert("Invalid JSON format. Please check your input.");
     }
   };
